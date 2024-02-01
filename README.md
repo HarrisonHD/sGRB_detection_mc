@@ -1,1 +1,95 @@
-# sGRB_detection_mc
+# Basic Simulation of Short Gamma-Ray Burst Detection Rates
+
+## Overview
+
+
+This is a toolkit which comprises python scripts designed for simulating the detections of sGRBs. 
+The scripts are using methods described in "Revisiting Coincidence Rate Between Gravitational Wave Detection and Short Gamma-Ray Burst for the Advanced and Third Generation" by Regimbau et al. 
+
+This was written to addresses the following:
+
+- Streamlines the process of simulating the detection rates of Short Gamma Ray Bursts.
+- consolidates the sGRB simulation work carried out by the authors into a single toolkit.
+- Simplifies the simulation of sGRB detections.
+- Provides a basic statistical and visual analysis of simulated points and  direct comparisons to real data from the SWIFT satellite, providing a benchmark for accuracy and relevance.
+
+
+
+## Features
+
+- **Detection Rate Visualization**: Tools for generating detailed graphs that illustrate the detection rates of GW and sGRB under various parameters.
+- **Automated Redshift Analysis**: Scripts to calculate and analyze the redshift probabilities for detected events, crucial for understanding the cosmological distance and origins of these phenomena.
+- **Rejection Sampling Simulation**: Implementation of the rejection sampling method for realistic simulation of detection events, based on probabilistic models.
+
+
+- **Data Preparation**: Scripts to prepare SWIFT data points for analysis and comparison to simulated data.
+- **Detection Rate Visualization**: Tools for creating graphs that illustrate the detection abilities of the SWIFT observatory. 
+- **Automated Redshift Distribution**: The ability to draw Redshift probability distribution given a number of star formation rates as described in "Revisiting Coincidence Rate Between Gravitational Wave Detection and Short Gamma-Ray Burst for the Advanced and Third Generation"
+- **Rejection Sampling Simulation**: A basic implementation of a rejection sampling method for the detection of sGRBs based on probabilistic models.
+-**Work in Progress MCMC**: A work in progress implementation of a Markov Chain Monte Carlo method for the detection of sGRBs based on probabilistic models using the EMCEE package.
+
+
+
+## File Descriptions
+
+This is a breakdown of each of the scripts outlining the functionality and their purpose.
+
+### `swift_data_clean.py`
+
+- **Purpose**: Cleans and prepares SWIFT data for analysis and comparison to simulated data.
+- **Key Functions**:
+  - Moves the entries with missing values to a separate such that it can be added at a later date.
+  - Ensures consistent units for all data points.
+  - Outputs a cleaned dataset that will be used for further analysis.
+- **Dependencies**: requires grb_table of data collected by the Swift Observatory (https://swift.gsfc.nasa.gov/archive/grb_table), ensure the correct columns are selected.
+
+### `Pz_Redshift.py` and `Pz_Auto.py`
+
+- **Purpose**: Calculates a redshift probability distribution for sGRBs based on a variety of different SFR. `Pz_Redshift.py` offeres a manual way allowing for finer control and 
+`Pz_Auto.py` will automatically calculate the redshift probability distribution for all provided SFR at tmin values of $20 \times 10^{-3}, 100 \times 10^{-3}, 1000 \times 10^{-3}, 3000 \times 10^{-3}, 5000 \times 10^{-3}$
+- **Key Functions**:
+    -Constructs a probability distribution by normalising (in the interval 0–10) the coalescence rate as described by Regimbau et al.
+- **Dependencies**: requires the txt file SFR_Rome.txt to generate the redshift probability distribution for the Rome model, this file was provided by K. Siellez
+
+
+### `Rejection_Method.py`
+
+- **Purpose**: Implements a basic rejection sampling method to simulate sGRBs
+
+- **Key Functions**:
+  - Applies a rejection sampling technique to generate a set of simualted sGRBs which are then exported as a txt file for further analysis.
+  - Allows the user to specify the number of sGRBs to be simulated, the Pz distribution to be used.
+- **Dependencies**: This script requires the desired Pz distribution to be specified in the Pz file as outputted by either `Pz_Redshift.py` or `Pz_Auto.py`
+
+### `Emcee_Method.py`
+
+- **Purpose**: a starting point for a MCMC simulation of sGRBs using the emcee package
+
+
+### `Detection_rate_graph.py`
+
+- **Purpose**: Generates a graph that illustrates the detection rates of sGRBs and compares them to the SWIFT data points and sensitivity curves.
+- **Key Functions**:
+  - Creates a graph that compares the simulated population of sGRBs to the SWIFT data points.
+  - Allows for detection rate analysis which includes the ability to specify the number of sGRBs above a certain detection threshold.
+- **Dependencies**: This scripts requires the output of the `Rejection_Method.py` script and the output of `swift_data_clean.py` to plot the required points.
+
+All of the scripts are designed and implemented to run independently of each other however they do depend on files generated by teh scripts before them. 
+
+## Dependencies
+
+- Python 3.x
+- re
+- NumPy
+- Matplotlib
+- SciPy
+- AstroPy
+- emcee (for MCMC)
+
+## Acknowledgments
+
+This project draws upon the research and findings of T. Regimbau, K. Siellez, D. Meacher, B. Gendre, and M. Boer, whose work has significantly contributed to the field.
+
+## Disclaimer
+
+These scripts are intended for research and educational purposes only.
